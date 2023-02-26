@@ -1,24 +1,38 @@
 import { StyleSheet, Text, View, Dimensions, Image, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 const { width, height } = Dimensions.get("screen")
+import { useFocusEffect} from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Markdown from 'react-native-markdown-display';
 const StabilitaCyklu = () => {
+    const [lang, setLang] = useState<any>({})
+    useFocusEffect(
+        React.useCallback(() => {
+            (async()=>{
+              const data:string|null = await AsyncStorage.getItem("i18");
+              if(data){      
+                  setLang(JSON.parse(data))
+              }
+          })()
+            return () => {
+                setLang({})
+            };
+          }, [])
+    )
     return (
+   
+     
         <ScrollView style={{ height: "100%", marginBottom:200}}>
-            <Text style={styles.fontStyle}>Po adaptačním období prokázal Drovelis výbornou kontrolu cyklu. {"\n"}Díky prodloužené eliminaci z organismu toleruje chybu v užívání až 24hod. </Text>
+            <Text style={styles.fontStyle}>
+                {lang.EfficiencyCycleStabilityPageTitle ||""}
+            </Text>
             <View style={styles.content}>
                 <View style={styles.wrapper}>
-                    <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                        Celkově Drovelis prokázal dobrou kontrolu cyklu s předvídatelným průběhem menstruace a minimálními nepravidelnostmi.
-                    </Text>
+               <Markdown>
+                {lang.EfficiencyCycleStabilityPageFristParagraph || ""}
+               </Markdown>
 
-                    <Text style={{ fontSize: 18, marginTop: 10 }}>
-                        Pravidelné menzes či špinění se objevily u 92 až 94 % žen, 48 % epizod bylo pouze špinění.{"\n"}
-                        Medián pravidelné menstruace či špinění se pohyboval v rozmezí 4 až 5 dnů na jeden cyklus.{"\n"}
-                        Po adaptačním období omezeném na 1. cyklus se výskyt menstruačních nepravidelností pohyboval mezi 13 až 19 %. Většina příhod se však omezila pouze na špinění.
-                    </Text>
-                    <Text>{"\n"}</Text>
-                    <Text style={{ fontWeight: "bold" }}>Záznam menstruačního krvácení – procento žen s jakýmkoli krvácením či špiněním v průběhu 12 cyklů</Text>
-                    <Image source={require("../../../assets/kontrola_cyklus.png")} style={{
+                <Image source={require("../../../assets/kontrola_cyklus.png")} style={{
                         resizeMode: "contain",
                         width: 900,
                         height: 250,
@@ -66,7 +80,12 @@ shadowRadius: 3.84,
 
 elevation: 5,
                     }} />
-                    <Text style={{fontSize:12, textAlign:"center", fontStyle:"italic"}}>{"\n"}Zpracováno dle Archer. Bleeding Patterns of Oral Contraceptives with a Cyclic Dosing Regimen: An Overview. J. Clin. Med. 2022, 11, 4634.</Text>
+                    <Text style={{textAlign:"center"}}>
+{"\n"}
+
+                    {lang.EfficiencyCycleStabilityPageReferenceText}
+                    </Text>
+                   
                     <Text>{"\n"}</Text>
                     <Text>{"\n"}</Text>
                     <Text>{"\n"}</Text>
@@ -93,7 +112,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
         alignContent: "center",
         width,
-        height: height - 170,
+        height: height - 200,
         zIndex: -2
     },
     wrapper: {

@@ -14,6 +14,7 @@ import { Image } from "react-native"
 import { Asset } from 'expo-asset';
 import Setrnost from './screens/Setrnost/SetrnostMain';
 import * as Font from 'expo-font';
+import Settings from './screens/Settings';
 
 
 
@@ -67,6 +68,8 @@ export default function App() {
           <Drawer.Screen name="bezpecnost-rozcestnik" component={BezpecnostMain} />
           <Drawer.Screen name="estetrol-rozcestnik" component={EstetrolMain} />
           <Drawer.Screen name="spc" component={SPC} />
+          <Drawer.Screen name="settings" component={Settings} />
+
         </Drawer.Navigator>
         <StatusBar hidden={true} />
       </GlobalProvider>

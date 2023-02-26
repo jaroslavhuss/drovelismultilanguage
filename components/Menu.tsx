@@ -49,6 +49,12 @@ const Menu = () => {
                 }} style={[styles.appleBg, currentMenu === "spc" && styles.selectedMenuItem]}>
                     <AntDesign name="pdffile1" size={30} color="white" />
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                    navigate("settings")
+                    setMenu("settings");
+                }} style={[styles.appleBg, currentMenu === "settings" && styles.selectedMenuItem]}>
+                    <AntDesign name="setting" size={30} color="white" />
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -58,7 +64,7 @@ export default Menu
 
 const styles = StyleSheet.create({
     appleMenu: {
-        zIndex: 10,
+        zIndex: 1000,
         position: "absolute",
         bottom: 0,
         left: 0,

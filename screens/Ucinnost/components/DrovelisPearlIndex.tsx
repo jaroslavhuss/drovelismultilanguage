@@ -1,48 +1,54 @@
-import { StyleSheet, Text, View, Dimensions, Image } from 'react-native'
-import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { useNavigation } from '@react-navigation/native'
+import { StyleSheet, Text, View, Dimensions, Image, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
+
 const { width, height } = Dimensions.get("screen")
+import { useFocusEffect} from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Markdown from 'react-native-markdown-display';
 const DrovelisPearlIndex = () => {
-    const { navigate }: any = useNavigation()
+    const [lang, setLang] = useState<any>({})
+    useFocusEffect(
+        React.useCallback(() => {
+            (async()=>{
+              const data:string|null = await AsyncStorage.getItem("i18");
+              if(data){      
+                  setLang(JSON.parse(data))
+              }
+          })()
+            return () => {
+                setLang({})
+            };
+          }, [])
+    )
     return (
+  
         <View>
-            <Text style={styles.fontStyle}>Drovelis je účinná antikoncepce s velmi nízkým Pearl indexem</Text>
+            <ScrollView>
+            <Text style={styles.fontStyle}>{lang.EfficiencyDrovelisPearlIndexPageTitle || ""}</Text>
             <View style={styles.content}>
                 <View style={styles.wrapper}>
-                    <Text style={{ fontSize: 17 }}>
-                        V evropské klinické studii, která vycházela z celkového počtu <Text style={{ fontWeight: "bold" }}>14 759 cyklů</Text>
-                        {"\n"}(s vyloučením cyklů se záložní antikoncepcí a cyklů bez sexuální aktivity),
-                        byly u žen ve věku 18–35 let zjištěny následující hodnoty Pearl indexu:{"\n"}{"\n"}
-                        <Text style={{ fontWeight: "bold" }}>Selhání metody: 0,26</Text>{"\n"}
-                        <Text style={{ fontWeight: "bold" }}>Selhání metody a uživatelky: 0,44</Text>
-                    </Text>
-                    <TouchableOpacity onPress={() => {
-                        navigate("spc")
-                    }}>
-                        <Text style={{ fontSize: 15, marginTop: 10 }}>Citace SPC</Text>
-                    </TouchableOpacity>
+                    <Markdown>
+                       {lang.EfficiencyDrovelisPearlIndexPageFirstParagraph || ""}
+                      </Markdown>
+
+                <Text>{""}</Text>
+                <Text>{""}</Text>
+                <Text>{""}</Text>
                     <Image source={require("../../../assets/pearl_index.png")} style={{
                         resizeMode: "contain",
                         width: 600,
                         height: 250,
                         alignSelf: "center"
                     }} />
-                    <Text style={{ fontSize: 15 }}>
-                        <Text style={{ fontWeight: "bold" }}>Tolerance chyby v užívání:</Text>{"\n"}
-                        <Text>Pokud se užití kterékoliv růžové aktivní tablety opozdí o méně než 24 hodin, není antikoncepční ochrana narušena. Žena má užít tabletu okamžitě, jakmile si to uvědomí, a další tabletu pak užije v obvyklou dobu.
-                        </Text>
-
-                    </Text>
-                    <TouchableOpacity onPress={() => {
-                        navigate("spc")
-                    }}>
-                        <Text style={{ fontSize: 15, marginTop: 10 }}>Citace SPC</Text>
-                    </TouchableOpacity>
+                    <Markdown>
+                        {lang.EfficiencyDrovelisPearlIndexPageSecondParagraph}
+                    </Markdown>
+                   
                 </View>
             </View>
-
+            </ScrollView>
         </View>
+
     )
 }
 

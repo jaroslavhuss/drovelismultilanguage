@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import DisplayComponent from "./DisplayComponent";
 import Heading from '../../components/Heading'
 import Layout from '../../components/Layout'
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Screen1 = () => {
   const { width, height } = Dimensions.get("screen");
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -16,8 +16,15 @@ const Screen1 = () => {
 
   const [theSeleciton, setTheSeleciton] = useState(0);
   const [displayComponent, setDisplayComponent] = useState(false);
+  const [lang, setLang] = useState<any>({})
   useFocusEffect(
     React.useCallback(() => {
+      (async()=>{
+        const data:string|null = await AsyncStorage.getItem("i18");
+        if(data){      
+            setLang(JSON.parse(data))
+        }
+    })()
       runAni();
       return () => {
         fadeAnim.setValue(0);
@@ -110,20 +117,20 @@ const Screen1 = () => {
   }
   return (
     <Layout>
-      <Heading heading="Účinnost" />
+      <Heading heading={lang.EfficiencyTitle} />
       <View style={{ flexDirection: "row", justifyContent: "space-evenly", marginTop: 100 }}>
         <TouchableOpacity onPress={() => {
           setDisplayComponent(true);
           setTheSeleciton(1);
         }} style={{ position: "relative", justifyContent: "center", alignItems: "center" }}>
-          <Text style={styles.textWindow}>Drovelis Pearl{"\n"}index</Text>
+          <Text style={styles.textWindow}>{lang.EfficiencyDrovelisPearlIndexMENU1}</Text>
           <Animated.Image style={{ width: 180, height: 240, opacity: window1 }} source={require("../../assets/window_s_kridlem.png")} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {
           setDisplayComponent(true);
           setTheSeleciton(2);
         }} style={{ position: "relative", justifyContent: "center", alignItems: "center" }}>
-          <Text style={styles.textWindow}>stabilita{"\n"}cyklu</Text>
+          <Text style={styles.textWindow}>{lang.EfficiencyCycleStabilityMENU}</Text>
           <Animated.Image style={{ width: 180, height: 240, opacity: window2 }} source={require("../../assets/window_bez_kridla.png")} />
         </TouchableOpacity>
 

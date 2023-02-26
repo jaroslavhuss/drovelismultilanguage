@@ -14,7 +14,7 @@ const Prsa = ({ selection, display }: any) => {
     }, [])
     return (
         <View style={styles.page}>
-            <ImageBackground style={{ width, height }} source={require("../../assets/pozadidetail.png")}>
+            <ImageBackground style={{ width, height, zIndex:1000 }} source={require("../../assets/pozadidetail.png")}>
                 {selectionState > 1 && <TouchableOpacity style={styles.back} onPress={() => {
                     setSelectionState(selectionState - 1)
                 }}><AntDesign name="caretleft" size={60} color="#E81E75" /></TouchableOpacity>}
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
         position: "absolute",
         justifyContent: "center",
         alignItems: "center",
-        zIndex: 1
+        zIndex: 100,
+
     },
     fontStyle: {
         color: "#d9326f",

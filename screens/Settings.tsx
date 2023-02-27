@@ -3,13 +3,12 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {URL} from "../Global_URL"
 type LangType = {
     id: number;
 name: string;
 code: string;
 }
-const strapi_url = "http://10.0.1.38:1337";
 const Settings = () => {
    
     const [listOfLanguages, setListOfLanguages] = useState<LangType[]>([])
@@ -25,8 +24,10 @@ const Settings = () => {
       });
 
       const loadLocales = async () =>{
+
+        console.log(URL+"/api/i18n/locales")
         try {
-            const res:Response = await fetch(strapi_url+"/api/i18n/locales");
+            const res:Response = await fetch(URL+"/api/i18n/locales");
             const data:LangType[] = await res.json();
             if(data.length>0){
                 setListOfLanguages(data)
@@ -43,15 +44,15 @@ const Settings = () => {
 
       const downloadLanguagePack = async (index:number) =>{
         try {
-            const res:Response = await fetch(strapi_url+`/api/drovelis-presentations?populate=*&locale=${listOfLanguages[index].code}`);
+            const res:Response = await fetch(URL+`/api/drovelis-presentations?populate=*&locale=${listOfLanguages[index].code}`);
             const data:any= await res.json();
 
-            console.log(data[0].attributes)
-        // await AsyncStorage.setItem("i18", JSON.stringify(data.data[0].attributes));
+            console.log(data.data[0].attributes)
+        await AsyncStorage.setItem("i18", JSON.stringify(data.data[0].attributes));
 
-        //     setListOfLanguages([])
+            setListOfLanguages([])
 
-        //     setRequestMessage(`${listOfLanguages[index].name} was successfully uploaded to your device. If you do not see any changes, please, turn off and on the app.`)
+            setRequestMessage(`${listOfLanguages[index].name} was successfully uploaded to your device. If you do not see any changes, please, turn off and on the app.`)
             
         } catch (error:any) {
             setRequestMessage(error.toString())

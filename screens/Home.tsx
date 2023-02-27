@@ -8,9 +8,11 @@ import { useFonts } from 'expo-font';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL } from '../Global_URL';
+import MultiImage from '../components/MultiImage';
 const Home = () => {
 
     const [lang, setLang] = useState<any>({})
+    const [logoURL, setLogoURL] = useState("");
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
     Animated.sequence([
@@ -26,21 +28,30 @@ const Home = () => {
           })
     ]).start();
 
-    useFocusEffect(() => {
-       
-        setLoadAnimatedComponents(true);
+    useFocusEffect(
+        React.useCallback(() => {
+            (async()=>{
+              const data:string|null = await AsyncStorage.getItem("i18");
+              if(data){      
+                  setLang(JSON.parse(data)) 
+              }
+          })()
+            return () => {
+                setLang({})
+                setLoadAnimatedComponents(false);
+                fadeAnim.setValue(0);
+            };
+          }, [])
+    )
 
-        (async()=>{
-            const data:string|null = await AsyncStorage.getItem("i18");
-            if(data){      
-                setLang(JSON.parse(data))
-            }
-        })()
-        return () => {
-          setLoadAnimatedComponents(false);
-          fadeAnim.setValue(0);
-        }
-    });
+    useEffect(()=>{
+       //here will be image caching logic
+       if(Object.keys(lang).length>0){
+        lang.hasOwnProperty("HPDrovelisImageLogo")&&setLogoURL(URL+lang.HPDrovelisImageLogo.data.attributes.url);
+       }
+      
+     //  
+    },[lang])
     const [loadAnimatedComponents, setLoadAnimatedComponents] = useState(false);
     const [loaded] = useFonts({
         "Museo": require("../assets/fonts/museo.otf"),
@@ -51,7 +62,6 @@ const Home = () => {
         return null;
       }
     
-
     return (
         <Layout>
            <ImageBackground source={require("../assets/bgd.png")} style={styles.bg}>
@@ -72,19 +82,12 @@ const Home = () => {
                 color:"#E81E75",
                 fontSize:35,}}
             />:<></>}
-           
-                <Animated.Image 
-                style={{
-                    resizeMode:"contain",
+        
+       
+       <MultiImage nameOfTheImage='HPDrovelisImageLogo'style={{ resizeMode:"contain",
                     width:250,
                     height:200,
-                    opacity:1
-                }}
-                source={require("../assets/dead_img.png")}
-                />
-       
-            
-                     
+                    opacity:1}}/>
               </View>
            </ImageBackground>
         </Layout>

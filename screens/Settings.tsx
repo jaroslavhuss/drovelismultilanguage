@@ -9,13 +9,13 @@ type LangType = {
 name: string;
 code: string;
 }
-
+const strapi_url = "http://10.0.1.38:1337";
 const Settings = () => {
-    const [height, setHeight] = useState<number>(Dimensions.get("screen").height)
-    const [width, setWidth] = useState<number>(Dimensions.get("screen").width)
+   
     const [listOfLanguages, setListOfLanguages] = useState<LangType[]>([])
     const [requestMessage, setRequestMessage] = useState("");
-
+    const [height, setHeight] = useState<number>(Dimensions.get("screen").height)
+    const [width, setWidth] = useState<number>(Dimensions.get("screen").width)
     useEffect(() => {
         const subscription = Dimensions.addEventListener('change', ({ window, screen }) => {
           setHeight(screen.height)
@@ -26,11 +26,14 @@ const Settings = () => {
 
       const loadLocales = async () =>{
         try {
-            const res:Response = await fetch("http://10.15.101.177:1337/api/i18n/locales");
+            const res:Response = await fetch(strapi_url+"/api/i18n/locales");
             const data:LangType[] = await res.json();
-
             if(data.length>0){
                 setListOfLanguages(data)
+
+            }else{
+                setListOfLanguages([]);
+                setRequestMessage("There was a prblem with either connection or language server. We could not download the language pack for you. Try it later or contact huss@richtergedeon.cz")
             }
             
         } catch (error:any) {
@@ -40,18 +43,25 @@ const Settings = () => {
 
       const downloadLanguagePack = async (index:number) =>{
         try {
-            const res:Response = await fetch(`http://10.15.101.177:1337/api/drovelis-presentations?populate=*&locale=${listOfLanguages[index].code}`);
+            const res:Response = await fetch(strapi_url+`/api/drovelis-presentations?populate=*&locale=${listOfLanguages[index].code}`);
             const data:any= await res.json();
 
-        await AsyncStorage.setItem("i18", JSON.stringify(data.data[0].attributes));
+            console.log(data[0].attributes)
+        // await AsyncStorage.setItem("i18", JSON.stringify(data.data[0].attributes));
 
-            setListOfLanguages([])
+        //     setListOfLanguages([])
 
-            setRequestMessage(`${listOfLanguages[index].name} was successfully uploaded to your device. If you do not see any changes, please, turn off and on the app.`)
+        //     setRequestMessage(`${listOfLanguages[index].name} was successfully uploaded to your device. If you do not see any changes, please, turn off and on the app.`)
             
         } catch (error:any) {
             setRequestMessage(error.toString())
         }
+      }
+
+    
+
+      const imageUrlDownload = async () =>{
+        console.log(listOfLanguages)
       }
   return (
     <Layout>
@@ -61,6 +71,7 @@ const Settings = () => {
                 <TouchableOpacity style={styles.btn} onPress={loadLocales}>
                     <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>Load Languages</Text>
                 </TouchableOpacity>
+              
                 {
                     listOfLanguages && listOfLanguages.map((l:LangType,i:number)=>
                     <View key={i} style={{flexDirection:"column", width:width/3, marginTop:10}}>

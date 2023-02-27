@@ -7,7 +7,7 @@ const {width, height} = Dimensions.get("screen");
 import { useFonts } from 'expo-font';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { URL } from '../Global_URL';
 const Home = () => {
 
     const [lang, setLang] = useState<any>({})
@@ -27,6 +27,7 @@ const Home = () => {
     ]).start();
 
     useFocusEffect(() => {
+       
         setLoadAnimatedComponents(true);
 
         (async()=>{
@@ -71,12 +72,19 @@ const Home = () => {
                 color:"#E81E75",
                 fontSize:35,}}
             />:<></>}
-                     <Animated.Image style={{
-                         resizeMode:"contain",
-                         width:250,
-                         height:200,
-                         opacity:1
-                     }} source={require("../assets/final_logo.png")} />   
+           
+                <Animated.Image 
+                style={{
+                    resizeMode:"contain",
+                    width:250,
+                    height:200,
+                    opacity:1
+                }}
+                source={require("../assets/dead_img.png")}
+                />
+       
+            
+                     
               </View>
            </ImageBackground>
         </Layout>

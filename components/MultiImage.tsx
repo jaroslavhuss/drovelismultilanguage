@@ -14,6 +14,7 @@ const MultiImage = ({nameOfTheImage, style}:{nameOfTheImage:string, style:StyleP
                 const data:string|null = await AsyncStorage.getItem("i18");
                 if(data){
                     const getUrl = JSON.parse(data);
+                    console.log(URL+getUrl[nameOfTheImage].data.attributes.url)
                     setImage(URL+getUrl[nameOfTheImage].data.attributes.url)
                 }  
              })()
@@ -24,7 +25,7 @@ const MultiImage = ({nameOfTheImage, style}:{nameOfTheImage:string, style:StyleP
         ,[nameOfTheImage])
   )
     
-  return (image.length>0&&<Image source={{uri:image}} style={style}/>)
+  return <>{(image.length>0&&<Image source={{uri:image}} style={style}/>)}</>
 
     
 

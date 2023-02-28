@@ -1,1 +1,1 @@
-export const URL:string = "http://10.15.101.131:1337"
+export const URL:string = "http://10.0.1.38:1337"

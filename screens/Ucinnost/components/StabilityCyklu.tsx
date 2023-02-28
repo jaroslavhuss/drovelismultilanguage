@@ -4,6 +4,8 @@ const { width, height } = Dimensions.get("screen")
 import { useFocusEffect} from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Markdown from 'react-native-markdown-display';
+import SecuredMarkdown from '../../../components/SecuredMarkdown';
+import MultiImage from '../../../components/MultiImage';
 const StabilitaCyklu = () => {
     const [lang, setLang] = useState<any>({})
     useFocusEffect(
@@ -23,66 +25,34 @@ const StabilitaCyklu = () => {
    
      
         <ScrollView style={{ height: "100%", marginBottom:200}}>
-            <Text style={styles.fontStyle}>
-                {lang.EfficiencyCycleStabilityPageTitle ||""}
-            </Text>
+            <SecuredMarkdown style={styles.fontStyle} keyName='EfficiencyCycleStabilityPageTitle'/>
             <View style={styles.content}>
                 <View style={styles.wrapper}>
-               <Markdown>
-                {lang.EfficiencyCycleStabilityPageFristParagraph || ""}
-               </Markdown>
-
-                <Image source={require("../../../assets/kontrola_cyklus.png")} style={{
-                        resizeMode: "contain",
+               <SecuredMarkdown element='markdown' keyName='EfficiencyCycleStabilityPageFristParagraph'></SecuredMarkdown>
+                    
+                    <MultiImage style={{resizeMode: "contain",
                         width: 900,
                         height: 250,
-                        alignSelf: "center"
-                    }} />
-                    
-           
+                        alignSelf: "center"}} nameOfTheImage='EfficiencyCycleStabilityPageImage1'/>
                 </View>
                 
             </View>
-           
-         <Image source={require("../../../assets/graf_1.png")} style={{
-                        resizeMode: "contain",
+           <MultiImage style={{ resizeMode: "contain",
                         width: 900,
                         height: 350,
                         alignSelf: "center",
-                     borderRadius:12,
-                        shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: 2,
-},
-shadowOpacity: 0.25,
-shadowRadius: 3.84,
+                     borderRadius:12}} nameOfTheImage="EfficiencyCycleStabilityPageImage2"/>
 
-                    }} />
                     <Text>{"\n"}</Text>
                 
          
                         <Text>{"\n"}</Text>
-                        <Image source={require("../../../assets/graf_2.png")} style={{
-                        resizeMode: "contain",
+                        <MultiImage style={{ resizeMode: "contain",
                         width: 900,
                         height: 350,
                         alignSelf: "center",
-                     borderRadius:12,
-                        shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: 2,
-},
-shadowOpacity: 0.25,
-shadowRadius: 3.84,
-
-                    }} />
-                    <Text style={{textAlign:"center"}}>
-{"\n"}
-
-                    {lang.EfficiencyCycleStabilityPageReferenceText}
-                    </Text>
+                     borderRadius:12}} nameOfTheImage="EfficiencyCycleStabilityPageImage3"/>
+    <SecuredMarkdown keyName='EfficiencyCycleStabilityPageReferenceText' element='text' style={{textAlign:"center"}}/>
                    
                     <Text>{"\n"}</Text>
                     <Text>{"\n"}</Text>

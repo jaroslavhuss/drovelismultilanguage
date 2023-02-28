@@ -6,9 +6,9 @@ import { useFocusEffect} from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Markdown from 'react-native-markdown-display';
 import MultiImage from '../../../components/MultiImage';
+import SecuredMarkdown from '../../../components/SecuredMarkdown';
 const DrovelisPearlIndex = () => {
     const [lang, setLang] = useState<any>({})
-    const [image, setImage] = useState("")
     useFocusEffect(
         React.useCallback(() => {
             (async()=>{
@@ -17,31 +17,17 @@ const DrovelisPearlIndex = () => {
                   setLang(JSON.parse(data))
               }
           })()
-            return () => {
-                setLang({})
-            };
           }, [])
     )
-
-    useEffect(()=>{
-        //here will be image caching logic
-        if(Object.keys(lang).length>0){
-         lang.hasOwnProperty("HPDrovelisImageLogo")&&setImage(URL+lang.HPDrovelisImageLogo.data.attributes.url);
-        }
-       
-      //  
-     },[lang])
     return (
   
         <View>
             <ScrollView>
-            <Text style={styles.fontStyle}>{lang.EfficiencyDrovelisPearlIndexPageTitle || ""}</Text>
+           <SecuredMarkdown style={styles.fontStyle} keyName='EfficiencyDrovelisPearlIndexPageTitle'/>
             <View style={styles.content}>
                 <View style={styles.wrapper}>
-                    <Markdown>
-                       {lang.EfficiencyDrovelisPearlIndexPageFirstParagraph || ""}
-                      </Markdown>
-
+                    
+<SecuredMarkdown element='markdown' keyName="EfficiencyDrovelisPearlIndexPageFirstParagraph"></SecuredMarkdown>
                 <Text>{""}</Text>
                 <Text>{""}</Text>
                 <Text>{""}</Text>
@@ -50,10 +36,8 @@ const DrovelisPearlIndex = () => {
                         width: 600,
                         height: 250,
                         alignSelf: "center"}}/>
-                    <Markdown>
-                        {lang.EfficiencyDrovelisPearlIndexPageSecondParagraph}
-                    </Markdown>
-                   
+                        
+                        <SecuredMarkdown element='markdown' keyName="EfficiencyDrovelisPearlIndexPageSecondParagraph"></SecuredMarkdown>
                 </View>
             </View>
             </ScrollView>

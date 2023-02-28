@@ -37,21 +37,12 @@ const Home = () => {
               }
           })()
             return () => {
-                setLang({})
                 setLoadAnimatedComponents(false);
                 fadeAnim.setValue(0);
             };
           }, [])
     )
 
-    useEffect(()=>{
-       //here will be image caching logic
-       if(Object.keys(lang).length>0){
-        lang.hasOwnProperty("HPDrovelisImageLogo")&&setLogoURL(URL+lang.HPDrovelisImageLogo.data.attributes.url);
-       }
-      
-     //  
-    },[lang])
     const [loadAnimatedComponents, setLoadAnimatedComponents] = useState(false);
     const [loaded] = useFonts({
         "Museo": require("../assets/fonts/museo.otf"),

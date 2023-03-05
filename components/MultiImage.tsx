@@ -1,5 +1,5 @@
-import { StyleSheet, Image, StyleProp, Text } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { StyleSheet, Image, StyleProp,Platform } from 'react-native'
+import React, { useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {URL} from "../Global_URL"
 import { useFocusEffect } from '@react-navigation/native'
@@ -10,17 +10,28 @@ const MultiImage = ({nameOfTheImage, style}:{nameOfTheImage:string, style:StyleP
   useFocusEffect(
     React.useCallback(
         ()=>{
+          if(Platform.OS === "ios" || Platform.OS === "android"){
             (async()=>{
-                const data:string|null = await AsyncStorage.getItem("i18");
-                if(data){
-                    const getUrl = JSON.parse(data);
-                    console.log(URL+getUrl[nameOfTheImage].data.attributes.url)
-                    setImage(URL+getUrl[nameOfTheImage].data.attributes.url)
-                }  
-             })()
-             return () =>{
-                setImage("")
-             }
+              const getTheRightImageUri:string|null = await AsyncStorage.getItem(nameOfTheImage);
+              if(getTheRightImageUri){
+                setImage(getTheRightImageUri)
+              }
+            })()
+          }
+          //If web is used, it will load data straight from the URL.
+          else{
+            (async()=>{
+              const data:string|null = await AsyncStorage.getItem("i18");
+              if(data){
+                  const getUrl = JSON.parse(data);
+                  setImage(URL+getUrl[nameOfTheImage].data.attributes.url)
+              }  
+           })()
+           return () =>{
+              setImage("")
+           }
+          }
+          
         }
         ,[nameOfTheImage])
   )

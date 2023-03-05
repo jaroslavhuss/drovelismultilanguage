@@ -15,7 +15,7 @@ import { Asset } from 'expo-asset';
 import Setrnost from './screens/Setrnost/SetrnostMain';
 import * as Font from 'expo-font';
 import Settings from './screens/Settings';
-
+import "@expo/metro-runtime"
 
 
 export default function App() {

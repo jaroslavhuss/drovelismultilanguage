@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, SafeAreaView, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {URL} from "../Global_URL"
+import * as FileSystem from 'expo-file-system';
+import { FileSystemDownloadResult } from 'expo-file-system';
+
 type LangType = {
     id: number;
 name: string;
@@ -47,8 +50,9 @@ const Settings = () => {
             const res:Response = await fetch(URL+`/api/drovelis-presentations?populate=*&locale=${listOfLanguages[index].code}`);
             const data:any= await res.json();
 
-            console.log(data.data[0].attributes)
-        await AsyncStorage.setItem("i18", JSON.stringify(data.data[0].attributes));
+        await AsyncStorage.setItem("i18", JSON.stringify(data.data[0].attributes)).then(async()=>{
+            downloadAllImages()
+        })
 
             setListOfLanguages([])
 
@@ -61,8 +65,35 @@ const Settings = () => {
 
     
 
-      const imageUrlDownload = async () =>{
-        console.log(listOfLanguages)
+      const testDownload = (imgUrl:string, name:string, localStorageKeyName:string) =>{
+        const finalImageUrl = URL+imgUrl
+        FileSystem.downloadAsync(
+            finalImageUrl,
+            FileSystem.documentDirectory + name
+          )
+            .then(async({ uri }) => {
+              await AsyncStorage.setItem(localStorageKeyName,uri).then(()=>{
+                console.log(`Saved to local storage under the key = ${localStorageKeyName} & URL: ${uri}`)
+              })
+            })
+            .catch(error => {
+              console.error(error);
+            });
+      }
+
+      const downloadAllImages =async () =>{
+        const local:string|null = await AsyncStorage.getItem("i18");
+        if(local){
+            const imgJson = JSON.parse(local);
+            for (const key in imgJson) {
+                if(key.match(/image/gi)){
+                    const imgURL:string = imgJson[key].data.attributes.url;
+                    const imgName:string = imgJson[key].data.attributes.name;
+                    const localStorageKeyName:string = key;
+                    testDownload(imgURL, imgName, localStorageKeyName)
+                }
+            }
+        }
       }
   return (
     <Layout>
@@ -72,7 +103,6 @@ const Settings = () => {
                 <TouchableOpacity style={styles.btn} onPress={loadLocales}>
                     <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>Load Languages</Text>
                 </TouchableOpacity>
-              
                 {
                     listOfLanguages && listOfLanguages.map((l:LangType,i:number)=>
                     <View key={i} style={{flexDirection:"column", width:width/3, marginTop:10}}>
@@ -86,7 +116,7 @@ const Settings = () => {
                     )
                 }
                 <Text style={{paddingTop:20}}>{requestMessage}</Text>
-        </View>
+          </View>
         </SafeAreaView>
 </ScrollView>
     </Layout>

@@ -1,4 +1,4 @@
-import { StyleSheet, Image, StyleProp,Platform } from 'react-native'
+import { Image, StyleProp,Platform } from 'react-native'
 import React, { useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {URL} from "../Global_URL"
@@ -45,5 +45,3 @@ const MultiImage = ({nameOfTheImage, style}:{nameOfTheImage:string, style:StyleP
 }
 
 export default MultiImage
-
-const styles = StyleSheet.create({})

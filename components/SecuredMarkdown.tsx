@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Markdown from 'react-native-markdown-display'
-const SecuredMarkdown = ({keyName, element, style}:{keyName:string, element?:"text"|"markdown", style?:StyleProp<any>}) => {
+const SecuredMarkdown = ({keyName, element, style}:{keyName:string, element?:"text"|"markdown"|"loopstring", style?:StyleProp<any>}) => {
   const [text, setText] = useState<string>("")
   useFocusEffect(
     React.useCallback(
@@ -25,7 +25,8 @@ const SecuredMarkdown = ({keyName, element, style}:{keyName:string, element?:"te
   return (
     //@ts-ignore
     <>{element==="markdown" && <Markdown>{text}</Markdown> } 
-      {element !== "markdown" && <Text style={style}>{text}</Text>}
+      {element === "text" && <Text style={style}>{text}</Text>}
+      {element === "loopstring" && text.split(",").map((t,i)=><Text key={i} style={style}>{t}</Text>)}
     </>
   )
 }

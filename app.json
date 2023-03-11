@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "drovelisnative",
-    "slug": "drovelisnative",
+    "name": "Drovelis",
+    "slug": "drovelisglobal",
     "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/icon.png",
@@ -18,7 +18,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jaroslav.huss.drovelisnative"
+      "bundleIdentifier": "com.jaroslav.huss.drovelisglobal"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,7 +31,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "abb71479-0b9a-4640-9c20-28e08f1de8ec"
+        "projectId": "bba6679e-3639-49fa-b7b1-61396b7cca71"
       }
     }
   }

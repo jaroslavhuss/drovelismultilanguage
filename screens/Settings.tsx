@@ -5,8 +5,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {URL} from "../Global_URL"
 import * as FileSystem from 'expo-file-system';
-import { FileSystemDownloadResult } from 'expo-file-system';
-
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Foundation } from '@expo/vector-icons';
 type LangType = {
     id: number;
 name: string;
@@ -58,6 +58,9 @@ const Settings = () => {
 
             setRequestMessage(`${listOfLanguages[index].name} was successfully uploaded to your device. If you do not see any changes, please, turn off and on the app.`)
             
+            setTimeout(()=>{
+              setRequestMessage("")
+            },2000)
         } catch (error:any) {
             setRequestMessage(error.toString())
         }
@@ -97,15 +100,23 @@ const Settings = () => {
       }
   return (
     <Layout>
-        <ScrollView>
             <SafeAreaView>
-        <View style={{width, height, justifyContent:"center", alignItems:"center"}}>
-                <TouchableOpacity style={styles.btn} onPress={loadLocales}>
-                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>Load Languages</Text>
+              
+        <View style={{width, height, flexDirection:"row", padding:width*0.06, alignItems:"center", justifyContent:"center"}}>
+      {
+        //First columnt
+      }
+          <View style={{width:width/2-width*0.1, margin:2, padding:2, height:"auto", justifyContent:"center", alignItems:"center", borderRadius:5}}>
+          
+          <TouchableOpacity style={styles.btn} onPress={loadLocales}>
+                    <Text style={{color:"#7eb1c6c2", fontWeight:"bold", fontSize:18}}>Update language pack</Text>
+                    <MaterialCommunityIcons style={{textAlign:"center"}} name="update" size={64} color="#7eb1c6c2" />
                 </TouchableOpacity>
+          <ScrollView >
                 {
                     listOfLanguages && listOfLanguages.map((l:LangType,i:number)=>
-                    <View key={i} style={{flexDirection:"column", width:width/3, marginTop:10}}>
+                    
+                    <View key={i} style={{flexDirection:"column", width:width/3, marginTop:10, justifyContent:"center"}}>
                     <TouchableOpacity style={{margin:4, padding:12, borderWidth:1, borderColor:"Grey", borderRadius:5}} onPress={()=>{
                         downloadLanguagePack(i)
                     }}>
@@ -116,9 +127,27 @@ const Settings = () => {
                     )
                 }
                 <Text style={{paddingTop:20}}>{requestMessage}</Text>
+                </ScrollView>
+          </View>
+          {
+        //Second column
+      }
+
+<View style={{width:width/2-width*0.1, margin:2, padding:2, height:"auto", justifyContent:"center", alignItems:"center", borderRadius:5}}>
+          
+          <TouchableOpacity style={styles.btn}>
+                    <Text style={{color:"#7eb1c6c2", fontWeight:"bold", fontSize:18}}>Dynamic Pages</Text>
+                 
+                    <Foundation name="page-search" style={{textAlign:"center"}} size={64}color="#7eb1c6c2" />
+                </TouchableOpacity>
+          <ScrollView >
+                {
+                    //Tady už pak propíši dynamickou komponentu
+                }
+                </ScrollView>
+          </View>
           </View>
         </SafeAreaView>
-</ScrollView>
     </Layout>
   )
 }
@@ -131,6 +160,5 @@ const styles = StyleSheet.create({
         paddingRight:20,
         paddingTop:10,
         paddingBottom:10,
-        backgroundColor:"#7eb1c6c2"
     }
 })

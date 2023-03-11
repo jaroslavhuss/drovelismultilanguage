@@ -60,7 +60,14 @@ export default function App() {
   return (
     <NavigationContainer>
       <GlobalProvider>
-        <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Navigator initialRouteName="Home" screenOptions={
+          {
+           headerStyle:{
+            display:"none"
+           },
+           headerShown:false
+          }
+        }>
           <Drawer.Screen name="Home" component={Home} />
           <Drawer.Screen name="ucinnost-rozcestnik" component={UcinnostRozcestnik} />
           <Drawer.Screen name="kontrola-cyklu-rozcestnik" component={KontrolaCyklu} />

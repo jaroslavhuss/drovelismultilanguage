@@ -5,6 +5,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import Heading from '../../components/Heading'
 import Layout from '../../components/Layout'
 import DisplayComponent from "./DisplayComponent";
+import SecuredMarkdown from '../../components/SecuredMarkdown';
 
 const Screen1 = () => {
     const { width, height } = Dimensions.get("screen");
@@ -160,20 +161,21 @@ const Screen1 = () => {
     }
     return (
         <Layout>
-            <Heading heading="Šetrnost" />
+            <Heading heading={<SecuredMarkdown element='text' keyName='FrugalityMenuTitle'/>} />
             <View style={{ flexDirection: "row", justifyContent: "space-evenly", marginTop: 100 }}>
                 <TouchableOpacity onPress={() => {
                     setDisplayComponent(true);
                     setTheSeleciton(1);
                 }} style={{ position: "relative", justifyContent: "center", alignItems: "center", margin: 5 }}>
-                    <Text style={styles.textWindow}>spokojenost a snášenlivost</Text>
+                    <SecuredMarkdown element='text' style={styles.textWindow} keyName="FrugalityMenuSatisfaction"/>
                     <Animated.Image style={{ width: 140, height: 190, opacity: window1 }} source={require("../../assets/window_bez_kridla.png")} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
                     setDisplayComponent(true);
                     setTheSeleciton(2);
                 }} style={{ position: "relative", justifyContent: "center", alignItems: "center", margin: 5 }}>
-                    <Text style={styles.textWindow}>hmotnostní{"\n"}stabilita</Text>
+                   <SecuredMarkdown element='text' style={styles.textWindow} keyName="FrugalityMenuStability"/>
+                   
                     <Animated.Image style={{ width: 140, height: 190, opacity: window2 }} source={require("../../assets/window_zadni.png")} />
                 </TouchableOpacity>
 
@@ -181,7 +183,8 @@ const Screen1 = () => {
                     setDisplayComponent(true);
                     setTheSeleciton(3);
                 }} style={{ position: "relative", justifyContent: "center", alignItems: "center", margin: 5 }}>
-                    <Text style={styles.textWindow}>bio</Text>
+                   <SecuredMarkdown element='text' style={styles.textWindow} keyName="FrugalityMenuBio"/>
+                   
                     <Animated.Image style={{ width: 140, height: 190, opacity: window3 }} source={require("../../assets/window_bez_kridla.png")} />
                 </TouchableOpacity>
 
@@ -189,7 +192,8 @@ const Screen1 = () => {
                     setDisplayComponent(true);
                     setTheSeleciton(4);
                 }} style={{ position: "relative", justifyContent: "center", alignItems: "center", margin: 5 }}>
-                    <Text style={styles.textWindow}>eko</Text>
+                    <SecuredMarkdown element='text' style={styles.textWindow} keyName="FrugalityMenuEko"/>
+                   
                     <Animated.Image style={{ width: 140, height: 190, opacity: window4 }} source={require("../../assets/window_bez_kridla.png")} />
                 </TouchableOpacity>
 

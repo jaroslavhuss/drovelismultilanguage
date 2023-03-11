@@ -1,15 +1,30 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, Dimensions } from 'react-native'
+import MultiImage from '../../../components/MultiImage';
 const {width,height}:{width:number, height:number} = Dimensions.get("screen");
 const Ctyritypy = () => {
     return (
         <View style={{marginLeft:60}}>
             <Text style={styles.fontStyle}>4 typy estrogenů</Text>
             <View style={styles.fourGrid}>
-                <Image source={require("../../../assets/adrovelis.png")} style={styles.image}/>
-                <Image source={require("../../../assets/bdrovelis.png")} style={styles.image}/>
-                <Image source={require("../../../assets/cdrovelis.png")} style={styles.image}/>
-                <Image source={require("../../../assets/ddrovelis.png")} style={styles.image}/>
+                
+            
+                <MultiImage
+            nameOfTheImage="EstetrolTypesImage1"
+            style={styles.image}
+          />
+                <MultiImage
+            nameOfTheImage="EstetrolTypesImage2"
+            style={styles.image}
+          />
+                <MultiImage
+            nameOfTheImage="EstetrolTypesImage3"
+            style={styles.image}
+          />
+                <MultiImage
+            nameOfTheImage="EstetrolTypesImage4"
+            style={styles.image}
+          />
             </View>
         </View>
     )

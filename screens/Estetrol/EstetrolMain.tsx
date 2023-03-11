@@ -5,6 +5,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import Heading from '../../components/Heading'
 import Layout from '../../components/Layout'
 import DisplayComponent from "./DisplayComponent";
+import SecuredMarkdown from '../../components/SecuredMarkdown';
 
 const Screen1 = () => {
     const {width,height} = Dimensions.get("screen");
@@ -111,27 +112,28 @@ const turnOffComponent = () => {
 }
     return (
         <Layout>
-            <Heading heading="Estetrol"/>
+            <Heading heading={<SecuredMarkdown element='text' keyName='EstetrolMenuTitle'/>}/>
             <View style={{flexDirection:"row", justifyContent:"space-around", marginTop:100}}>
              <TouchableOpacity onPress={() => {
               setDisplayComponent(true);
-              setTheSeleciton(1);
+              setTheSeleciton(1); //
              }} style={{position:"relative", justifyContent:"center", alignItems:"center"}}>
-                 <Text style={styles.textWindow}>4 typy{"\n"}estrogenů</Text>
+                 <SecuredMarkdown element='text' style={styles.textWindow} keyName="EstetrolMenuTypesEstrogen"/>
                  <Animated.Image style={{width:180, height:240, opacity:window1}} source={require("../../assets/window_bez_kridla.png")} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               setDisplayComponent(true);
               setTheSeleciton(2);
              }} style={{position:"relative", justifyContent:"center", alignItems:"center"}}>
-                 <Text style={styles.textWindow}>rozdíly mezi{"\n"}typy estrogenů</Text>
+                  <SecuredMarkdown element='text' style={styles.textWindow} keyName="EstetrolMenuDifferences"/>
+                
               <Animated.Image style={{width:180, height:240, opacity:window2}} source={require("../../assets/window_s_kridlem.png")} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               setDisplayComponent(true);
               setTheSeleciton(3);
              }} style={{position:"relative", justifyContent:"center", alignItems:"center"}}>
-                 <Text style={styles.textWindow}>NEST</Text>
+                  <SecuredMarkdown element='text' style={styles.textWindow} keyName="EstetrolMenuNEST"/>
                 <Animated.Image style={{width:180, height:240, opacity:window3}} source={require("../../assets/window_bez_kridla.png")} />
             </TouchableOpacity>
             </View>
@@ -157,7 +159,8 @@ const styles = StyleSheet.create({
         fontFamily:"Museo",
         color:"#d9326f",
         fontSize:20,
-        textAlign:"center"
-   
+        textAlign:"center",
+        maxWidth:"90%",
+        flexWrap:"wrap"
     }
 });

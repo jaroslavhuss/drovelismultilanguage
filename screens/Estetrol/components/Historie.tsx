@@ -1,14 +1,14 @@
-import React,{useState} from 'react'
+import React from 'react'
 import { ReactElement } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Dimensions } from 'react-native'
 
 const {width, height}:{width:number, height:number} = Dimensions.get("screen");
-import { AntDesign } from '@expo/vector-icons';
+import MultiImage from '../../../components/MultiImage';
+import SecuredMarkdown from '../../../components/SecuredMarkdown';
 const Historie = ():ReactElement => {
-    const [citaceLegenda, setCitaceLegenda] = useState<number>(0);
     return (
         <View>
-            <Text style={styles.fontStyle}>Historie Estetrolu</Text>
+<SecuredMarkdown element='text' style={styles.fontStyle} keyName="EstetrolNestHistoryOfEstetrolTitle"/>
           <View style={{
               flexDirection:"row",
               justifyContent:"center",
@@ -16,7 +16,7 @@ const Historie = ():ReactElement => {
               marginTop:100
           }}>
        
-          <Image source={require("../../../assets/historie.png")} style={styles.image}/>
+          <MultiImage nameOfTheImage='EstetrolNestHistoryOfEstetrolImage' style={styles.image}/>
           </View>
                  
               </View>    

@@ -15,6 +15,7 @@ import { URL } from "../Global_URL";
 import * as FileSystem from "expo-file-system";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
+import PostPreview from "../components/PostPreview";
 type LangType = {
   id: number;
   name: string;
@@ -122,6 +123,36 @@ const Settings = () => {
       }
     }
   };
+
+
+const [postWereUpdated, setPostWereUpdated] = useState(false);
+const [listOfPosts, setListOfPosts] = useState([]);
+  useEffect(() => {
+   
+  (async()=>{
+    const posts:string|null = await AsyncStorage.getItem("posts");
+    if(posts){
+      //tady posty
+      console.log(posts)
+      setListOfPosts(JSON.parse(posts));
+    }
+  })()
+    return () => {
+      setListOfPosts([])
+      setPostWereUpdated(false);
+    }
+  }, [postWereUpdated])
+  
+  const downloadDynamicPages = async (lang:string) =>{
+    try {
+      const res:Response = await fetch(URL+`/api/drovelis-dynamic-pages?populate=*&locale=${lang}`);
+      const data = await res.json();
+      AsyncStorage.setItem("posts", JSON.stringify(data.data))
+      setPostWereUpdated(!postWereUpdated)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <Layout>
       <SafeAreaView>
@@ -211,7 +242,9 @@ const Settings = () => {
               borderRadius: 5,
             }}
           >
-            <TouchableOpacity style={styles.btn}>
+            <TouchableOpacity style={styles.btn} onPress={()=>{
+              downloadDynamicPages("en")
+            }}>
               <Text
                 style={{ color: "#7eb1c6c2", fontWeight: "bold", fontSize: 18 }}
               >
@@ -227,7 +260,11 @@ const Settings = () => {
             </TouchableOpacity>
             <ScrollView>
               {
-                //Tady už pak propíši dynamickou komponentu
+               listOfPosts && listOfPosts.map((p,i)=>{
+                  return (
+                    <PostPreview data={p} key={i}/>
+                  )
+                })
               }
             </ScrollView>
           </View>

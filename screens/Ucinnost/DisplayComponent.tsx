@@ -12,6 +12,17 @@ const Prsa = ({ selection, display }: any) => {
             //
         }
     }, [])
+
+
+    const [height, setHeight] = useState<number>(Dimensions.get("screen").height)
+    const [width, setWidth] = useState<number>(Dimensions.get("screen").width)
+    useEffect(() => {
+        const subscription = Dimensions.addEventListener('change', ({ window, screen }) => {
+          setHeight(screen.height)
+          setWidth(screen.width)
+        });
+        return () => subscription?.remove();
+      });
     return (
         <View style={styles.page}>
             <ImageBackground style={{ width, height, zIndex:1000 }} source={require("../../assets/pozadidetail.png")}>

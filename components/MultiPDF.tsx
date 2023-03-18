@@ -1,13 +1,14 @@
 import { Platform, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { URL } from '../Global_URL'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import WebView from 'react-native-webview'
-
 const MultiPDF = ({nameOfThePDF}:{nameOfThePDF:string}) => {
     const [pdf, setPdf] = useState<string>("")
     const [loadComponent, setLoadComponent] = useState<boolean>(false)
+
+
     useFocusEffect(
         useCallback(()=>{
          
@@ -18,7 +19,9 @@ const MultiPDF = ({nameOfThePDF}:{nameOfThePDF:string}) => {
                       setPdf(getTheRightImageUri)
                     }
                   })()
-            }else{
+               
+            }
+            else{
                 (async()=>{
                     const data:string|null = await AsyncStorage.getItem("i18");
                     if(data){
@@ -34,15 +37,22 @@ const MultiPDF = ({nameOfThePDF}:{nameOfThePDF:string}) => {
             }
         },[nameOfThePDF])
     )
+
+
   return (
     <View style={{ width: "100%", height: "100%" }}>
                     {
                         loadComponent && <WebView
-                            originWhitelist={["file://*", "http://*", "https://*"]}
-                            source={{uri:pdf}}
-                            allowFileAccess
-                            allowUniversalAccessFromFileURLs
-                            allowFileAccessFromFileURLs
+                            originWhitelist={["*"]}
+                            source={{ uri: pdf }}
+                            allowFileAccess = {true}
+                            allowUniversalAccessFromFileURLs = {true}
+                            allowFileAccessFromFileURLs = {true}
+                            javaScriptEnabled={true}
+                            domStorageEnabled={true}
+                            useWebView2={true}
+                            startInLoadingState={true}
+                            style={{ width: "100%", height: "100%" }}
                         ></WebView>
                     }
                 </View>

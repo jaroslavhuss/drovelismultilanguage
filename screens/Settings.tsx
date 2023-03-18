@@ -5,7 +5,6 @@ import {
   Dimensions,
   TouchableOpacity,
   SafeAreaView,
-  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
@@ -27,6 +26,11 @@ const Settings = () => {
   const [height, setHeight] = useState<number>(Dimensions.get("screen").height);
   const [width, setWidth] = useState<number>(Dimensions.get("screen").width);
   useEffect(() => {
+    //ask user for file permission
+
+    
+
+
     const subscription = Dimensions.addEventListener(
       "change",
       ({ window, screen }) => {
@@ -38,7 +42,6 @@ const Settings = () => {
   });
 
   const loadLocales = async () => {
-    console.log(URL + "/api/i18n/locales");
     try {
       const res: Response = await fetch(URL + "/api/i18n/locales");
       const data: LangType[] = await res.json();
@@ -61,6 +64,8 @@ const Settings = () => {
         URL +
           `/api/drovelis-presentations?populate=*&locale=${listOfLanguages[index].code}`
       );
+
+      downloadDynamicPages(listOfLanguages[index].code);
       const data: any = await res.json();
 
       await AsyncStorage.setItem(
@@ -132,8 +137,6 @@ const [listOfPosts, setListOfPosts] = useState([]);
   (async()=>{
     const posts:string|null = await AsyncStorage.getItem("posts");
     if(posts){
-      //tady posty
-      console.log(posts)
       setListOfPosts(JSON.parse(posts));
     }
   })()
@@ -147,8 +150,46 @@ const [listOfPosts, setListOfPosts] = useState([]);
     try {
       const res:Response = await fetch(URL+`/api/drovelis-dynamic-pages?populate=*&locale=${lang}`);
       const data = await res.json();
-      AsyncStorage.setItem("posts", JSON.stringify(data.data))
-      setPostWereUpdated(!postWereUpdated)
+      console.log(data)
+      if(data.data.length > 0){
+        AsyncStorage.setItem("posts", JSON.stringify(data.data))
+        setPostWereUpdated(!postWereUpdated)
+//loop through the data and save images to local storage
+//const finalURLsOfImages:any = [];
+      //   data.data.forEach((post:any)=>{
+      //       const getContent = post.attributes.Content
+      //       //Extract all markdown images from the content as an array
+      //       const getImages = getContent.match(/!\[.*?\]\(.*?\)/g);
+      //       if(getImages){
+      //         getImages.forEach((image:any)=>{
+      //           const getURL = image.match(/\((.*?)\)/);
+      //           if(getURL){
+      //             const finalURL = getURL[1];
+      //             finalURLsOfImages.push(finalURL);
+      //             console.log(URL+finalURL)
+
+
+      //             FileSystem.downloadAsync(URL+finalURL, FileSystem.documentDirectory + finalURL.split("/")[finalURL.split("/").length-1])
+      // .then(async ({ uri }) => {
+      //   await AsyncStorage.setItem(finalURL.split("/")[finalURL.split("/").length-1], uri).then(() => {
+      //     console.log(
+      //       `Saved to local storage under the key = ${finalURL.split("/")[finalURL.split("/").length-1]} & URL: ${uri}`
+      //     );
+      //   });
+      // })
+      // .catch((error) => {
+      //   console.error(error);
+      // });
+
+      //           }
+      //         })
+      //       }
+      //   });
+      }else{
+         await AsyncStorage.removeItem("posts");
+         setPostWereUpdated(!postWereUpdated)
+      }
+    
     } catch (error) {
       console.log(error)
     }
@@ -242,22 +283,7 @@ const [listOfPosts, setListOfPosts] = useState([]);
               borderRadius: 5,
             }}
           >
-            <TouchableOpacity style={styles.btn} onPress={()=>{
-              downloadDynamicPages("en")
-            }}>
-              <Text
-                style={{ color: "#7eb1c6c2", fontWeight: "bold", fontSize: 18 }}
-              >
-                Dynamic Pages
-              </Text>
-
-              <Foundation
-                name="page-search"
-                style={{ textAlign: "center" }}
-                size={64}
-                color="#7eb1c6c2"
-              />
-            </TouchableOpacity>
+            
             <ScrollView>
               {
                listOfPosts && listOfPosts.map((p,i)=>{

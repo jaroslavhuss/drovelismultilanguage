@@ -5,6 +5,7 @@ import {
   Dimensions,
   TouchableOpacity,
   SafeAreaView,
+  Platform
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
@@ -13,7 +14,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL } from "../Global_URL";
 import * as FileSystem from "expo-file-system";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Foundation } from "@expo/vector-icons";
 import PostPreview from "../components/PostPreview";
 type LangType = {
   id: number;
@@ -27,10 +27,6 @@ const Settings = () => {
   const [width, setWidth] = useState<number>(Dimensions.get("screen").width);
   useEffect(() => {
     //ask user for file permission
-
-    
-
-
     const subscription = Dimensions.addEventListener(
       "change",
       ({ window, screen }) => {
@@ -59,6 +55,26 @@ const Settings = () => {
   };
 
   const downloadLanguagePack = async (index: number) => {
+    AsyncStorage.setItem("countryiso", listOfLanguages[index].code);
+    (async()=>{
+      //post fetch
+      try {
+      await fetch('https://private.gswps.eu:10443/api/drovelis-analytics', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({data:{
+            screen: "Settings", 
+            platform: Platform.OS,
+            event:"download_language_pack",
+            countryiso: listOfLanguages[index].code || "unknown",
+          }}),
+        });
+      } catch (error) {
+          console.log(error)
+      }
+    })()
     try {
       const res: Response = await fetch(
         URL +
@@ -150,7 +166,6 @@ const [listOfPosts, setListOfPosts] = useState([]);
     try {
       const res:Response = await fetch(URL+`/api/drovelis-dynamic-pages?populate=*&locale=${lang}`);
       const data = await res.json();
-      console.log(data)
       if(data.data.length > 0){
         AsyncStorage.setItem("posts", JSON.stringify(data.data))
         setPostWereUpdated(!postWereUpdated)
@@ -196,23 +211,24 @@ const [listOfPosts, setListOfPosts] = useState([]);
   }
   return (
     <Layout>
+      <Text style={{fontWeight:"bold", fontSize:20, textAlign:"center", padding:20}}>Settings</Text>
       <SafeAreaView>
         <View
           style={{
             width,
             height,
-            flexDirection: "row",
+            flexDirection: "column",
             padding: width * 0.06,
             alignItems: "center",
             justifyContent: "center",
           }}
         >
           {
-            //First columnt
+            //First column
           }
           <View
             style={{
-              width: width / 2 - width * 0.1,
+              width: width ,
               margin: 2,
               padding: 2,
               height: "auto",
@@ -274,7 +290,7 @@ const [listOfPosts, setListOfPosts] = useState([]);
 
           <View
             style={{
-              width: width / 2 - width * 0.1,
+              width: width - 200,
               margin: 2,
               padding: 2,
               height: "auto",

@@ -23,8 +23,10 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#FFFFFF",
+        "backgroundImage": "./assets/bgandroid.png"
+      },
+      "package": "com.jaroslav.huss.drovelisglobal"
     },
     "web": {
       "favicon": "./assets/favicon.png"

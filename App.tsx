@@ -15,7 +15,8 @@ import { Asset } from 'expo-asset';
 import Setrnost from './screens/Setrnost/SetrnostMain';
 import * as Font from 'expo-font';
 import Settings from './screens/Settings';
-import "@expo/metro-runtime"
+import LangSelection from './screens/LangSelection';
+import DynamicPages from './screens/DynamicPages';
 
 
 export default function App() {
@@ -69,14 +70,15 @@ export default function App() {
           }
         }>
           <Drawer.Screen name="Home" component={Home} />
-          <Drawer.Screen name="ucinnost-rozcestnik" component={UcinnostRozcestnik} />
-          <Drawer.Screen name="kontrola-cyklu-rozcestnik" component={KontrolaCyklu} />
-          <Drawer.Screen name="setrnost" component={Setrnost} />
-          <Drawer.Screen name="bezpecnost-rozcestnik" component={BezpecnostMain} />
-          <Drawer.Screen name="estetrol-rozcestnik" component={EstetrolMain} />
+          <Drawer.Screen name="Efficiency" component={UcinnostRozcestnik} />
+          <Drawer.Screen name="Cycle-control" component={KontrolaCyklu} />
+          <Drawer.Screen name="Frugality" component={Setrnost} />
+          <Drawer.Screen name="Safety" component={BezpecnostMain} />
+          <Drawer.Screen name="Estetrol" component={EstetrolMain} />
           <Drawer.Screen name="spc" component={SPC} />
           <Drawer.Screen name="settings" component={Settings} />
-
+          <Drawer.Screen name="lang-selection" component={LangSelection} />
+          <Drawer.Screen name="dynamic-pages" component={DynamicPages} />
         </Drawer.Navigator>
         <StatusBar hidden={true} />
       </GlobalProvider>

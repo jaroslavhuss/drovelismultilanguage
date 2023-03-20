@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Platform } from 'react-native'
 import React, { useState } from 'react'
 import { URL } from '../Global_URL'
 import { AntDesign } from '@expo/vector-icons';
 import Markdown from 'react-native-markdown-display';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 interface PreviewPostData  {
  attributes: {
   Title:string, 
@@ -27,9 +29,6 @@ const [shoudLoadThePost, setShoudLoadThePost] = useState<boolean>(false)
 
   const prepareContent = (content:string):string => {
     let finalContent:string = content;
-  //   const getArrayOfImages = content.split(/!\[.*?\]\((.*?)\)/gi).filter((item:string)=>{return item.match(/uploads/)}).map((item:string)=>{return URL + item})
-
-  //appends URL to the image in the content
 
   const finalImages = finalContent.replace(/!\[.*?\]\((.*?)\)/gi, (match:string, p1:string)=>{
       return `![${p1}](${URL + p1})`
@@ -45,7 +44,7 @@ const [shoudLoadThePost, setShoudLoadThePost] = useState<boolean>(false)
         <TouchableOpacity
         onPress={()=>{setShoudLoadThePost(!shoudLoadThePost)}}
         >
-          <AntDesign style={{textAlign:"right"}} name="closecircleo" size={24} color="black" />
+          <AntDesign style={{textAlign:"right"}} name="closecircleo" size={44} color="purple" />
         </TouchableOpacity>
         <Text style={{
           fontWeight:"bold",
@@ -64,7 +63,33 @@ const [shoudLoadThePost, setShoudLoadThePost] = useState<boolean>(false)
     </View>
     :
     <TouchableOpacity style={{borderWidth:0.3, borderRadius:8, padding:8, margin:2}}
-    onPress={()=>{setShoudLoadThePost(!shoudLoadThePost)}}
+    //track the event in the analytics
+    
+    onPress={
+      ()=>{
+        (async()=>{
+          //post fetch
+          try {
+          await fetch('https://private.gswps.eu:10443/api/drovelis-analytics', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({data:{
+                screen: Title, 
+                platform: Platform.OS, 
+                event:"dynamic_page_read",
+                countryiso: await AsyncStorage.getItem("countryiso") || "unknown"
+              }}), 
+            });
+          } catch (error) {
+              console.log(error)
+          }
+        })()
+
+        setShoudLoadThePost(!shoudLoadThePost)  
+      }
+    }
     >
       <View style={{flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
       <Image style={{width:100, height:100, resizeMode:"contain", flex:1, padding:2}} source={{uri:`${URL}${PreviewImage.data.attributes.url}`}}/>
